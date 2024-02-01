@@ -1,19 +1,33 @@
-import { Container } from "./App.styled";
+import { PrivateRoute } from "components/Routes/PrivateRoute";
+import { PublicRoute } from "components/Routes/PublicRoute";
+import { lazy, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Route, Routes } from "react-router-dom";
+import { fetchCurrentUser } from "../../redux/auth/operations";
 
-import ContactForm from "components/ContactForm/ContactForm";
-import ContactList from "components/ContactList/ContactList";
-import Filter from "components/Filter/Filter";
+const  Layout = lazy(() => import ("../../layout/Layout")) ;
+const  Home = lazy(() => import("../../pages/Home")) ;
+const  LoginPage = lazy(() => import("../../pages/LoginPage")) ;
+const RegisterPage = lazy(() => import("../../pages/RegisterPage"));
+const  Phonebook = lazy(() => import("../../pages/Phonebook")) ;
 
 export const App = () => { 
-  return ( 
-<Container>
-<h1>Phonebook</h1>
-<ContactForm />
-<h2>Contacts</h2>
+  const dispatch = useDispatch();
 
-  <Filter/>
-  <ContactList/>
-</Container>
-      );
+  useEffect(()=> {
+    dispatch(fetchCurrentUser());
+  },[dispatch]);
+
+  return (
+    <Routes>
+      <Route path="/" element={<Layout/>}>
+      <Route index element={<Home/>}/>
+      <Route path="login" element= {< PublicRoute component={<LoginPage/>} redirectTo="/contacts"/>} />
+      <Route path="register" element={< PublicRoute component={<RegisterPage/>} redirectTo="/contacts"/>}/>
+      <Route path="contacts" element={ <PrivateRoute component={<Phonebook/>} redirectTo="/login" />}/>
+      <Route path="*" element={<Home/>} />
+      </Route>
+    </Routes>
+  )
     };
 
