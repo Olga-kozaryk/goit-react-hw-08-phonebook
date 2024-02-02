@@ -5,7 +5,7 @@ import BtnDelete from './BtnDelet.styled';
 import { deleteContact, fetchContacts } from '../../redux/thunk';
 import { getContacts, getFilter } from '../../redux/selector';
 import { useEffect } from 'react';
-import Loader from 'components/Loader';
+import Loader from 'components/Loader/Loader';
 
 const ContactList = () => {
   const {items, isLoading} = useSelector(getContacts);
@@ -40,3 +40,5 @@ const ContactList = () => {
   );
 }
 export default ContactList;
+
+//Ok
