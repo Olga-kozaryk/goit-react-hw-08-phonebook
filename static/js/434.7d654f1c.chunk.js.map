@@ -1,1 +1,0 @@
-{"version":3,"file":"static/js/434.7d654f1c.chunk.js","mappings":"yMAEaA,EAAY,WACvB,OACEC,EAAAA,EAAAA,KAAA,OAAAC,SAAK,aAET,C","sources":["pages/Phonebook.jsx"],"sourcesContent":["import React from 'react'\n\nexport const Phonebook = () => {\n  return (\n    <div>Phonebook</div>\n  )\n}\n"],"names":["Phonebook","_jsx","children"],"sourceRoot":""}
