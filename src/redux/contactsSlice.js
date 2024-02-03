@@ -1,14 +1,21 @@
+
 import { createSlice } from "@reduxjs/toolkit";
 import { addContact, deleteContact, fetchContacts } from "../redux/thunk";
 
+
 const handlePending = state => {
   state.isLoading = true;
+  state.error = null;
 };
 
 const handleRejected = (state, action) => {
   state.isLoading = false;
   state.error = action.payload;
 };
+
+const handleFulfilled = (state) => {
+  state.isLoading = false;
+}
 
 const contactsSlice = createSlice({
   name: 'contacts',
@@ -17,34 +24,26 @@ const contactsSlice = createSlice({
       isLoading: false,
       error: null,
   },
-  extraReducers: {
-      [fetchContacts.pending]: handlePending,
-      [fetchContacts.fulfilled](state, action) {
-          state.isLoading = false;
-          state.error = null;
-          state.items = action.payload;
-      },
 
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchContacts.fulfilled, (state, action) => {
+        state.contacts = action.payload;
+      })
+      .addCase(addContact.fulfilled, (state, action) => {
+        state.contacts.push(action.payload); 
+      })
+      .addCase(deleteContact.fulfilled, (state, action) => {
+    state.contacts = state.contacts.filter(contact => contact.id !== action.payload);
 
-      [fetchContacts.rejected]: handleRejected,
-      [addContact.pending]: handlePending,
-      [addContact.fulfilled](state, action) {
-          state.isLoading = false;
-          state.error = null;
-          state.items.push(action.payload);
-      },
-      [addContact.rejected]: handleRejected,
-      [deleteContact.pending]: handlePending,
-      [deleteContact.fulfilled](state, action) {
-          state.isLoading = false;
-          state.error = null;
-          const i = state.items.findIndex(
-              contact => contact.id === action.payload.id
-          );
-          state.items.splice(i, 1);
-      },
-      [deleteContact.rejected]: handleRejected,
-  },
+})
+
+      .addMatcher((action) => action.type.endsWith('/pending'), handlePending)
+      .addMatcher((action) => action.type.endsWith('/fulfilled'), handleFulfilled)
+      .addMatcher((action) => action.type.endsWith('/rejected'), handleRejected)
+    
+    
+  }
 });
 
 export const contactsReducer = contactsSlice.reducer;
