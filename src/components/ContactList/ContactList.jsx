@@ -6,20 +6,20 @@ import {getVisibleContacts } from '../../redux/selector';
 import ContactListItem from './ContactListItem';
 
 const ContactList = () => {
-  const dispatch = useDispatch();
-  const visibleContacts = useSelector(getVisibleContacts);
+    const dispatch = useDispatch();
+    const visibleContacts = useSelector(getVisibleContacts);
 
-  const handleDeleteItem = async (id) => {
-      await dispatch(deleteContact(id)).unwrap();
-  };
+    const handleDeleteItem = async (id) => {
+        await dispatch(deleteContact(id)).unwrap();
+    };
 
-  return (
-      <OrderedList>
-          {visibleContacts.map((item) => (
-              <ContactListItem key={item.id} item={item} onDelete={handleDeleteItem} />
-          ))}
-      </OrderedList>
-  );
+    return (
+        <OrderedList>
+            {visibleContacts.map((item) => (
+                <ContactListItem key={item.id} item={item} onDelete={handleDeleteItem} />
+            ))}
+        </OrderedList>
+    );
 }
 
 export default ContactList;
