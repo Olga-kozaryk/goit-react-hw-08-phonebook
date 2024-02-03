@@ -1,63 +1,96 @@
 import { useDispatch, useSelector } from "react-redux";
-
-import { Form } from './ContactForm.styled';
-import { Label } from './LabelForm.styled';
-import { BtnForm } from './BtnForm.styled';
+import { nanoid } from "@reduxjs/toolkit";
+import { Form, Formik } from 'formik';
+import { Button, Flex, Text } from '@chakra-ui/react';
+import { useMemo } from "react";
+import * as yup from 'yup';
 
 import { addContact } from '../../redux/thunk';
-import { nanoid } from "@reduxjs/toolkit";
+import { getContacts } from "../../redux/selector";
+import { InputField } from "../LoginForm/InputField";
 
-const ContactForm = () => {
+const initialValues = {
+    name: '',
+    number: '',
+  };
+  
+  const ContactForm = () => {
     const dispatch = useDispatch();
-    const contacts = useSelector(state => state.contacts.items);
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        
-        const form = event.target;
-
-        const newContact = {
-            id:nanoid,
-            name: form.elements.name.value,
-            phone: form.elements.number.value,
-        };
-
-        const isContactExist = contacts.some(
-            contact =>
-              (contact.name &&
-                contact.name.toLowerCase().trim() === newContact.name.toLowerCase().trim()) ||
-              (contact.phone && contact.phone.trim() === newContact.phone.trim())
-          );
-
-          (isContactExist)? (alert(`${newContact.name} is already in contacts`)) :
-        
-        dispatch(addContact(newContact));
-        
-        form.reset();
+    const contacts = useSelector(getContacts);
+  
+    const validation = useMemo(() => yup.object().shape({
+      name: yup
+        .string()
+        .matches(/^[a-zA-Za-яА-Я]+(([' -][a-zA-Za-яА-Я ])?[a-zA-Za-яА-Я]*)*$/g, 'Should be name')
+        .test(
+          '',
+          ({ value }) => `${value} is already in contacts`,
+          (value) => {
+            return !contacts.find(existContact => existContact.name.toLowerCase() === value.toLowerCase())
+          })
+        .required(),
+      number: yup
+        .string()
+        .matches(/\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/g, 'Should be phone number')
+        .test('',
+          ({ value }) => `${value} is already in contacts`,
+          (value) => {
+            return !contacts.find(existContact => existContact.number.toLowerCase() === value.toLowerCase())
+          })
+        .required(),
+  
+    }), [contacts])
+  
+    const handleSubmit = async ({ name, number }, actions) => {
+      const newContact = {
+        id: nanoid(),
+        name,
+        number,
+      };
+      await dispatch(addContact(newContact)).unwrap();
+      actions.resetForm()
     };
-
+  
     return (
-            <Form onSubmit={handleSubmit}>
-                <Label>
-                    <input
-                        type="text"
-                        name="name"
-                        placeholder="Name"
-                        required/>
-                </Label>
-
-                <Label>
-                    <input
-                        type="tel"
-                        name="number"
-                        placeholder="Number"
-                        required
-                    /></Label>
-                <BtnForm type="submit">Add contact</BtnForm>
-            </Form>
-    )
-}
-
-export default ContactForm;
+      <Flex maxWidth='100%' flexDirection='column' alignItems='center' >
+        <Formik
+          onSubmit={handleSubmit}
+          initialValues={initialValues}
+          validationSchema={validation}
+        >
+          {({ isSubmitting, isValidating }) => (<Form>
+            <Flex width='600px' flexDirection='column' gap={6}>
+              <Text fontSize='2xl'>New phone</Text>
+  
+              <InputField
+                id="name"
+                label="Name"
+                placeholder="Please enter your name"
+                type="name"
+                name="name"
+              />
+  
+              <InputField
+                id="number"
+                label="Number"
+                placeholder="Please enter your number"
+                type="tel"
+                name="number"
+              />
+  
+              <Button
+                width='xs'
+                type="submit"
+                disabled={isSubmitting}
+                isLoading={isSubmitting}>
+                <Text>Add new contact</Text>
+              </Button>
+            </Flex>
+          </Form>)}
+        </Formik>
+      </Flex>)
+  }
+  
+  export default ContactForm;
 
 //OK

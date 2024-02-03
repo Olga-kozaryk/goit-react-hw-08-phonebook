@@ -1,5 +1,4 @@
 import { Flex, Text, Link as ChakraLink } from '@chakra-ui/react'
-import React from 'react'
 import { NavLink } from 'react-router-dom'
 
 export const Navigation = () => {
