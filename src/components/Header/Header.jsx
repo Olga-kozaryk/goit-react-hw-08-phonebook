@@ -1,12 +1,12 @@
 import { UserMenu } from 'components/UserMenu/UserMenu';
 import React from 'react'
-import { useSelector } from 'react-redux';
-import { getIsLoggedIn } from '../../redux/auth/authSelectors';
+
+import useAuth from '../../redux/auth/authSelectors';
 import { Navigation } from 'components/Navigation/Navigation';
 import { Flex, Text } from '@chakra-ui/react';
 
 export const Header = () => {
-    const isLoggedIn = useSelector(getIsLoggedIn);
+  const { isLoggedIn } = useAuth();
   return (
     <Flex 
       borderRadius='md'
