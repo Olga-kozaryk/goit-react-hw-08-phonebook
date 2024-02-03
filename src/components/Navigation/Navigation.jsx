@@ -7,11 +7,11 @@ export const Navigation = () => {
     <>
       <Flex gap={6}>
             <ChakraLink as={NavLink} to='/register' _activeLink={{ color: '#81E6D9' }}>
-                <Text fontSize='xl'>Register</Text>
+                <Text fontSize='xxl'>Register</Text>
             </ChakraLink>
 
             <ChakraLink as={NavLink} to='/login' _activeLink={{ color: '#81E6D9' }}>
-                <Text fontSize='xl'>Login</Text>
+                <Text fontSize='xxl'>Login</Text>
             </ChakraLink>
         </Flex>
 </>
