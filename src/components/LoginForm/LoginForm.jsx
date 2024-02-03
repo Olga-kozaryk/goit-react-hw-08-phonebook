@@ -1,51 +1,58 @@
-import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { logIn } from '../../redux/auth/operations';
+import { Form, Formik } from 'formik';
+import { Button, Flex, Text,} from '@chakra-ui/react';
+import { InputField } from '../LoginForm/InputField';
 
 export const LoginForm = () => {
     const dispatch = useDispatch();
-    const[email, setEmail] = useState('');
-    const[password, setPassword] = useState('');
+    const initialFormValues = {
+        email: "", password: "",
+      };
 
-    const handleChange =({target: {name, value}}) => {
-        switch (name) {
-            case 'email':
-                return setEmail(value);
-            case 'password':
-                return setPassword(value);
-            default:
-                return;
-        }
-    };
-
-    const handleSubmit = e => {
-        e.preventDefault();
-        dispatch(logIn({email, password}));
-        setEmail('');
-        setPassword('');
-    };
+      const handleSubmit = async ({ email, password }) => {
+        await dispatch(logIn({ email, password })).unwrap();
+      };      
 
   return (
-    <div>
-        <form onSubmit={handleSubmit} autoComplete="off">
-            <label>
-                <input
-                    type="email"
-                    name="email"
-                    value={email}
-                    onChange={handleChange}/>
-            </label>
+    <Formik 
+    onSubmit={handleSubmit}
+    initialValues={initialFormValues}
+    autoComplete="off">
 
-            <label>
-                <input
-                    type="password"
-                    name="password"
-                    value={password}
-                    onChange={handleChange}
-                    />
-            </label>
-            <button type="submit">Log In</button>
-        </form>
-    </div>
+        {({ isSubmitting }) => (
+        <Form>
+            <Flex 
+            width='600px' 
+            flexDirection='column' 
+            gap={6}>
+
+            <InputField
+              label="Email"
+              placeholder="Please enter your email"
+              type="email"
+              name="email"
+            />
+
+            <InputField
+              label="Password"
+              placeholder="Please enter your password"
+              type="password"
+              name="password"
+            />
+
+            <Button 
+            width='xs' 
+            type='summit' 
+            isLoading={isSubmitting} 
+            disabled={isSubmitting}>
+                
+              <Text>Login</Text>
+            </Button>
+
+                </Flex>    
+            </Form>)}        
+        </Formik>
+
   )
 }

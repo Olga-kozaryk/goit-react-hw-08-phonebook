@@ -1,63 +1,59 @@
-import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { register } from '../../redux/auth/operations';
+import { Button, Flex, Spinner, Text } from '@chakra-ui/react';
+import { Form, Formik } from 'formik';
+import { InputField } from '../LoginForm/InputField';
+
+const initialFormValues = {
+    email: "", password: "", name: '',
+}
 
 export const RegisterForm = () => {
     const dispatch = useDispatch();
-    const [name, setName] = useState('');
-    const[email, setEmail] = useState('');
-    const[password, setPassword] = useState('');
 
-    const handleChange =({target: {name, value}}) => {
-        switch (name) {
-            case 'name':
-                return setName(value);
-            case 'email':
-                return setEmail(value);
-            case 'password':
-                return setPassword(value);
-            default:
-                return;
-        }
-    };
-
-    const handleSubmit = e => {
-        e.preventDefault();
-        dispatch(register({name, email, password}));
-        setName('');
-        setEmail('');
-        setPassword('');
+    const handleSubmit = async ({ email, password, name }) => {
+        await dispatch(register({ email, password, name })).unwrap();
     };
 
   return (
-    <div>
-        <form onSubmit={handleSubmit} autoComplete="off">
-        <label>
-                <input
-                    type="text"
-                    name="name"
-                    value={name}
-                    onChange={handleChange}/>
-            </label>
+    <Formik 
+    onSubmit={handleSubmit}
+    initialValues={initialFormValues}
+    autoComplete="off">
 
-            <label>
-                <input
-                    type="email"
-                    name="email"
-                    value={email}
-                    onChange={handleChange}/>
-            </label>
+        {({ isSubmitting }) => (
+        <Form>
+            <Flex width='600px' flexDirection='column' gap={6}>
 
-            <label>
-                <input
-                    type="password"
-                    name="password"
-                    value={password}
-                    onChange={handleChange}
-                    />
-            </label>
-            <button type="submit">Sig In</button>
-        </form>
-    </div>
+            <InputField
+            label="Email"
+            placeholder="Please enter your email"
+            type="email"
+            name="email"
+            />
+
+            <InputField
+            label="Name"
+            placeholder="Please enter your name"
+            type="name"
+            name="name"
+            />
+
+            <InputField
+            label="Password"
+            placeholder="Please enter your password"
+            type="password"
+            name="password"
+            />
+
+            <Button 
+            width='xs' 
+            type='summit' 
+            disabled={isSubmitting}>
+            {isSubmitting ? <Spinner /> : <Text>Register</Text>}
+            </Button>
+            </Flex>
+            </Form>)}
+    </Formik>
   )
 }

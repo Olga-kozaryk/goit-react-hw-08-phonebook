@@ -12,16 +12,19 @@ import { theme } from './theme';
 
 
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-    <ChakraBaseProvider theme={theme}>
-        <BrowserRouter basename='goit-react-hw-08-phonebook'>
-          <App />
-        </BrowserRouter>
-        </ChakraBaseProvider>    
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <ChakraBaseProvider theme={theme}>
+          <BrowserRouter basename="/goit-react-hw-08-phonebook">
+            <App />
+          </BrowserRouter>
+        </ChakraBaseProvider>
       </PersistGate>
-  </Provider>
+    </Provider>
+  </React.StrictMode>
 );
 
 //OK

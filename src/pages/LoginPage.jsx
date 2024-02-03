@@ -1,15 +1,17 @@
-import { Link, useNavigate } from 'react-router-dom'
 import { LoginForm } from '../components/LoginForm/LoginForm'
+import { Flex, Text } from '@chakra-ui/react';
 
 export const LoginPage = () => {
-  const navigate = useNavigate();
-  
   return (
-    <div>
-      <h1>Log in</h1>
-      <LoginForm/>
-      <Link onClick={() => {
-      navigate('/register')}}>Don't have an account? Sign Up</Link>
-    </div>
+    <Flex 
+    maxWidth='100%' 
+    flexDirection='column' 
+    alignItems='center'
+    >
+    <Text fontSize='6xl' as='b'>Login</Text>
+    <LoginForm/>
+      <Text fontSize='2xl' as='b'>Don't have an account? Register</Text>
+    </Flex>
+    
   )
 }

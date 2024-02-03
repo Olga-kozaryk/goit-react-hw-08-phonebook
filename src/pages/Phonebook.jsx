@@ -1,8 +1,9 @@
-import { Container } from 'components/App/App.styled';
+
 import ContactForm from 'components/ContactForm/ContactForm';
 import ContactList from 'components/ContactList/ContactList';
-import Filter from 'components/Filter/Filter';
+import Filter from '../components/Filter/Filter';
 import React from 'react'
+import { Container } from '@chakra-ui/react';
 
 export const Phonebook = () => {
   return ( 

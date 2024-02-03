@@ -1,23 +1,40 @@
 import { useDispatch } from 'react-redux';
+import { useMemo, useState } from 'react';
+import { FormControl, FormLabel, Input, InputGroup } from '@chakra-ui/react';
+import debounce from 'lodash.debounce';
 
-import { Label } from './FilterLabel.styled';
-import { filter } from '../../redux/filterSlice';
+import { setFilter } from '../../redux/filterSlice';
 
 const Filter = () => {
   const dispatch = useDispatch();
+  const [value, setValue] = useState('');
 
-  const search = (e) => {
-    dispatch(filter(e.target.value));
+  const handlerChangeFilter = e => {
+      setValue(e.target.value);
+      debouncedFilterChange(e.target.value)
   };
 
+  const debouncedFilterChange = useMemo(() => debounce((value) => {
+      dispatch(setFilter(value.toLowerCase().trim()));
+  }, 300), [dispatch])
+
+
   return (
-    <Label>
-      <input name="filter"
-       onChange={search}
-       placeholder='Find contact'
-       />
-    </Label>
-  );
-};
+    <FormControl>
+        <FormLabel htmlFor='filter'>Find contacts by name:</FormLabel>
+
+        <InputGroup>
+            <Input
+                id="filter"
+                type="text"
+                name="filter"
+                onChange={handlerChangeFilter}
+                value={value}
+            />
+        </InputGroup>
+    </FormControl>
+
+);
+}
 
 export default Filter;

@@ -6,11 +6,11 @@ export const Navigation = () => {
   return (
     <>
       <Flex gap={6}>
-            <ChakraLink as={NavLink} to='/register' _activeLink={{ color: '#81E6D9' }}>
+            <ChakraLink as={NavLink} to='/register' _activeLink={{ color: '#B794F4' }}>
                 <Text fontSize='xxl'>Register</Text>
             </ChakraLink>
 
-            <ChakraLink as={NavLink} to='/login' _activeLink={{ color: '#81E6D9' }}>
+            <ChakraLink as={NavLink} to='/login' _activeLink={{ color: '#B794F4' }}>
                 <Text fontSize='xxl'>Login</Text>
             </ChakraLink>
         </Flex>
