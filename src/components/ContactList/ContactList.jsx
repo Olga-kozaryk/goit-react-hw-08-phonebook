@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { OrderedList, Text} from '@chakra-ui/react';
+import { OrderedList} from '@chakra-ui/react';
 
 import { deleteContact} from '../../redux/thunk';
 import {getContacts, getFilter} from '../../redux/selector';
@@ -21,10 +21,10 @@ const ContactList = () => {
 
     return (
         <OrderedList>
-           {visibleContacts.length > 0 ? (
-            visibleContacts.map((item) => 
+           {visibleContacts && 
+            (visibleContacts.map((item) => 
                 <ContactListItem key={item.id} item={item} onDelete={handleDeleteItem} />
-           )) : (<Text>No contacts found.</Text>)}
+           )) }
         </OrderedList>
     );
 }
