@@ -15,16 +15,15 @@ const ContactList = () => {
     item.name.toLowerCase().includes(filterValue.toLowerCase())
   );
 
-    const handleDeleteItem = async (id) => {
-        await dispatch(deleteContact(id)).unwrap();
+    const handleDeleteItem = (id) => {
+    dispatch(deleteContact(id));
     };
 
     return (
         <OrderedList>
-           {visibleContacts && 
-            (visibleContacts.map((item) => 
+            {visibleContacts.map((item) => 
                 <ContactListItem key={item.id} item={item} onDelete={handleDeleteItem} />
-           )) }
+           )}
         </OrderedList>
     );
 }
